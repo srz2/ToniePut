@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToniePut</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>ToniePut</h1>
+    <p>This is where you can get MyTonies filled with your own content!</p>
+    <ul>
+        <li>YouTube</li>
+        <li>Spotify</li>
+        <li>Local Files</li>
+    </ul>
+    <p>Are you ready? <em>Get Started!</em></p>
+    <h2>Sign Into Your MyTonie</h2>
+    {% if username == '' %}
+    <form action="/mytonie-login" method="post">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password">
+        <button type="submit">Login</button>
+    </form>
+    {% else %}
+    <form action="/logout" method="post">
+        <p>Logged in as: {{ username }}</p>
+        <button type="submit">Logout</button>
+    </form>
+    {% endif %}
+    <hr/>
+    <h2>Load your files below</h2>
+    <div>
+        <!-- Youtube -->
+         <div>
+            <form action="/youtube" method="post">
+                <input type="text" name="url_youtube" id="url_youtube" placeholder="Youtube Url">
+                <button type="submit">Load Youtube</button>
+            </form>
+         </div>
+        <!-- Spotify -->
+         <div>
+            <form action="/spotify" method="post">
+                <input type="text" name="url_spotify" id="url_spotify" placeholder="Spotify Url">
+                <button type="submit">Load Spotify</button>
+            </form>
+         </div>
+        <!-- Local -->
+         <div>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="file">
+                <button type="submit">Load File</button>
+            </form>
+         </div>
+         <hr/>
+         <div>
+                <h1>Upload to TonieBox</h1>
+                <h2>Pending Files</h2>
+                <ul>
+                    {% if files|length > 0 %}
+                    {%for file in files:%}
+                    <li>{{file}}</li>
+                    <form action="{{ url_for('rename_pending_file', filename=file) }}" method="POST" style="display:inline;">
+                        <input type="text" name="new-name" id="new-name" placeholder="Enter new name for file">
+                        <button type="submit">Rename Song</button>
+                    </form>
+                    <form action="{{ url_for('delete_pending_file', filename=file) }}" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this file?');">Delete Song</button>
+                    </form>
+                    {% endfor %}
+                    {% else %}
+                    <li>No Pending files found</li>
+                    {% endif %}
+                </ul>
+            <form action="/load-tonie" method="post">
+                <h2>Select your desired tonie</h2>
+                <label for="selected-tonie">Selected Creative Tonie</label>
+                <select id="selected-tonie" name="selected-tonie">
+                    {%for tonie in tonies%}
+                    <option value="{{tonie.id}}">{{tonie.name}} ({{tonie.id}})</option>
+                    {% endfor %}
+                </select>
+                <br/>
+                <button type="submit">Load Pending Files to Tonie</button>
+            </form>
+         </div>
+    </div>
+</body>
+</html>
