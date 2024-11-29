@@ -15,8 +15,8 @@
         <li>Local Files</li>
     </ul>
     <p>Are you ready? <em>Get Started!</em></p>
-    <h2>Sign Into Your MyTonie</h2>
     {% if not username %}
+    <h2>Sign Into Your MyTonie</h2>
     <form action="/mytonie-login" method="post">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username">
@@ -25,6 +25,7 @@
         <button type="submit">Login</button>
     </form>
     {% else %}
+    <h2>Welcome to ToniePut!</h2>
     <form action="/logout" method="post">
         <p>Logged in as: {{ username }}</p>
         <button type="submit">Logout</button>

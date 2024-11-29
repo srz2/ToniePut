@@ -1,6 +1,7 @@
 import subprocess
 
 def download(url):
+    song_name = None
     print(f"[Info]: Downloading Spotify at: {url}")
     process = subprocess.Popen(
         ["spotdl", url, "--format", "mp3", "--overwrite", "force"],
@@ -15,6 +16,9 @@ def download(url):
             # Find second the last colon
             end = line.rfind(":", 0, line.rfind(":")) - 1
             song_name = line[start:end] + ".mp3"
+
+    for line in process.stderr:
+        print(f"[Error]: {line}")
 
     process.wait()
     if process.returncode == 0:
