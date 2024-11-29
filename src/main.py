@@ -1,33 +1,51 @@
 import os
 import shutil
-from flask import Flask, render_template, request, redirect
+import pickle
+from flask import Flask, render_template, request, redirect, session
 import downloaders.download_spotify as spotify
 import downloaders.download_youtube as youtube
 from tonie_api.api import TonieAPI
 
 app = Flask(__name__)
+app.secret_key = os.getenv('session-secret', 'secret-key')
 
-user = None
+def get_user():
+    if 'user' in session:
+        user_pickle = session['user']
+        if user_pickle:
+            user = pickle.loads(user_pickle.encode('latin1'))
+            return user
+        return "No user in session."
+    else:
+        return None
+    
+def get_api_client():
+    user = get_user()
+    if not user:
+        return None
+    api : TonieAPI = user['api']['client']
+    api.session.token = user['api']['active-session-token']
+    return api
 
 def move_file(file):
-    global user
+    user = get_user()
     print(f"[Info]: User {user} moving file {file}")
     shutil.move(file, f"{user['upload_path']}/{file}")
 
 def save_file(file):
     print(f"[Info]: Saving file {file}")
-    global user
+    user = get_user()
     file.save(f"{user['upload_path']}/{file.filename}")
 
 def rename_file(current_file, new_name):
-    global user
+    user = get_user()
     cur_file = f"{user['upload_path']}/{current_file}"
     new_file = f"{user['upload_path']}/{new_name}"
     print(f"[Info]: Renaming file {cur_file} to {new_file}")
     os.rename(cur_file, new_file)
 
 def get_pending_files():
-    global user
+    user = get_user()
     if user == None:
         return []
     files = os.listdir(user['upload_path'])
@@ -39,7 +57,7 @@ def get_pending_files():
     return filtered_files
 
 def delete_file(target_file):
-    global user
+    user = get_user()
     files = get_pending_files()
     if not target_file in files:
         raise FileNotFoundError()
@@ -48,13 +66,14 @@ def delete_file(target_file):
 
 @app.route("/")
 def index():
-    global user
+    user = get_user()
     email = ''
     if user != None:
         email = user['profile'].email
-        print(f"Current user is {email}")
+
+    # User is logged in, get user information
     files = get_pending_files()
-    tonies = get_creative_tonies('objects')
+    tonies = get_creative_tonies()
     return render_template('index.html', files=files, tonies=tonies, username=email)
 
 @app.route("/mytonie-login", methods=["POST"])
@@ -65,16 +84,18 @@ def tonie_login():
     profile = api.get_me()
     if profile == None:
         print("[Error]: Failed to login")
-        return redirect("/")
-    global user
+        return render_template("error.html", message="Failed to log into TonieBox Api")
+
+    # Save user information
     user = {
         "profile": profile,
-        "credentials": {
-            "username": username,
-            "password": password
+        "api": {
+            "client" : api,
+            "active-session-token" : api.session.token
         },
         "upload_path": f"upload_to_tonie/{profile.uuid}",
     }
+    session['user'] = pickle.dumps(user).decode('latin1')
     
     # Create directory for user if it doesnt exist
     os.makedirs(user['upload_path'], exist_ok=True)
@@ -83,16 +104,14 @@ def tonie_login():
 
 @app.route("/logout", methods=["POST"])
 def tonie_logout():
-    global user
-    user = None
+    session.pop('user')
     return redirect('/')
 
 @app.route("/get-tonies", methods=["GET"])
-def get_creative_tonies(return_type=''):
-    global user
-    if user == None:
+def get_creative_tonies():
+    api = get_api_client()
+    if api == None:
         return []
-    api = TonieAPI(user['credentials']['username'], user["credentials"]['password'])
     house = api.get_households()[0]
     tonies = api.get_all_creative_tonies_by_household(house)
     return tonies
@@ -140,18 +159,18 @@ def rename_pending_file():
 
 @app.route('/load-tonie', methods=["POST"])
 def load_tonie():
-    global user
+    user = get_user()
     if user == None:
         return redirect("/")
     selected_tonie_id = request.form.get('selected-tonie')
     files = get_pending_files()
-    api = TonieAPI(user['credentials']['username'], user["credentials"]['password'])
+    api = get_api_client()
     house = api.get_households()[0]
 
     # Get tonie with matching Id
     tonies = list(filter(lambda tonie: (tonie.id == selected_tonie_id), api.get_all_creative_tonies_by_household(house)))
     if len(tonies) == 0:
-        return "Failed to find selected tonie"
+        return render_template('error.html', message="Failed to find selected tonie")
     
     selected_tonie = tonies[0]
     for file in files:
