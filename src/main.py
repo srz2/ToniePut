@@ -11,9 +11,11 @@ user = None
 
 def move_file(file):
     global user
+    print(f"[Info]: User {user} moving file {file}")
     shutil.move(file, f"{user['upload_path']}/{file}")
 
 def save_file(file):
+    print(f"[Info]: Saving file {file}")
     global user
     file.save(f"{user['upload_path']}/{file.filename}")
 
@@ -21,6 +23,7 @@ def rename_file(current_file, new_name):
     global user
     cur_file = f"{user['upload_path']}/{current_file}"
     new_file = f"{user['upload_path']}/{new_name}"
+    print(f"[Info]: Renaming file {cur_file} to {new_file}")
     os.rename(cur_file, new_file)
 
 def get_pending_files():
@@ -98,6 +101,8 @@ def get_creative_tonies(return_type=''):
 def process_Youtube():
     url = request.form['url_youtube']
     song_name = youtube.download(url)
+    if not song_name:
+        return render_template("/error.html", message='Failed to download youtube video')
     move_file(song_name)
     return redirect("/")
 
@@ -105,6 +110,8 @@ def process_Youtube():
 def process_spotify():
     url = request.form['url_spotify']
     song_name = spotify.download(url)
+    if not song_name:
+        return render_template("/error.html", message='Failed to download spotify video')
     move_file(song_name)
     return redirect("/")
 

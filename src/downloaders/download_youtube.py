@@ -1,6 +1,7 @@
 import subprocess
 
 def download(url):
+    print(f"[Info]: Downloading Youtube at: {url}")
     process = subprocess.Popen(
         ["yt-dlp", url, "-x", "--audio-format", "mp3", "--print", "filename", "-o", "%(title)s.%(ext)s", "--no-simulate"],
         stdout=subprocess.PIPE,
@@ -16,3 +17,4 @@ def download(url):
         return song_name[0:len(song_name) - 6] + ".mp3"
     else:
         print("An error occurred during the download.")
+        return None

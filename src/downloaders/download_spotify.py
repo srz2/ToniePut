@@ -1,6 +1,7 @@
 import subprocess
 
 def download(url):
+    print(f"[Info]: Downloading Spotify at: {url}")
     process = subprocess.Popen(
         ["spotdl", url, "--format", "mp3", "--overwrite", "force"],
         stdout=subprocess.PIPE,
@@ -21,3 +22,4 @@ def download(url):
         return song_name
     else:
         print("An error occurred during the download.")
+        return None
