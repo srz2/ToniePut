@@ -48,7 +48,14 @@ def get_pending_files():
     user = get_user()
     if user == None:
         return []
-    files = os.listdir(user['upload_path'])
+    user_file_path = user['upload_path']
+
+    # Issue logout of path does not exist
+    if not os.path.isdir(user_file_path):
+        tonie_logout()
+        raise LookupError()
+
+    files = os.listdir(user_file_path)
     filtered_files = []
     for file in files:
         if not file.endswith('.mp3'):
