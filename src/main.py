@@ -67,14 +67,11 @@ def delete_file(target_file):
 @app.route("/")
 def index():
     user = get_user()
-    email = ''
-    if user != None:
-        email = user['profile'].email
 
     # User is logged in, get user information
     files = get_pending_files()
     tonies = get_creative_tonies()
-    return render_template('index.html', files=files, tonies=tonies, username=email)
+    return render_template('index.html', files=files, tonies=tonies, username= None if user == None else user['profile'].email)
 
 @app.route("/mytonie-login", methods=["POST"])
 def tonie_login():

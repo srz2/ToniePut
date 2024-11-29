@@ -16,7 +16,7 @@
     </ul>
     <p>Are you ready? <em>Get Started!</em></p>
     <h2>Sign Into Your MyTonie</h2>
-    {% if username == '' %}
+    {% if not username %}
     <form action="/mytonie-login" method="post">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username">
@@ -29,8 +29,9 @@
         <p>Logged in as: {{ username }}</p>
         <button type="submit">Logout</button>
     </form>
-    {% endif %}
     <hr/>
+    {% endif %}
+    {% if username %}
     <h2>Load your files below</h2>
     <div>
         <!-- Youtube -->
@@ -87,5 +88,6 @@
             </form>
          </div>
     </div>
+    {% endif %}
 </body>
 </html>
