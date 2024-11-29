@@ -29,7 +29,7 @@ def get_api_client():
 
 def move_file(file):
     user = get_user()
-    print(f"[Info]: User {user} moving file {file}")
+    print(f"[Info]: Moving file {file}")
     shutil.move(file, f"{user['upload_path']}/{file}")
 
 def save_file(file):
