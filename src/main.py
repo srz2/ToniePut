@@ -27,11 +27,6 @@ def get_api_client():
     api.session.token = user['api']['active-session-token']
     return api
 
-def move_file(file):
-    user = get_user()
-    print(f"[Info]: Moving file {file}")
-    shutil.move(file, f"{user['upload_path']}/{file}")
-
 def save_file(file):
     print(f"[Info]: Saving file {file}")
     user = get_user()
@@ -121,21 +116,21 @@ def get_creative_tonies():
     return tonies
 
 @app.route("/youtube", methods=["POST"])
-def process_Youtube():
+def process_youtube():
+    user = get_user()
     url = request.form['url_youtube']
-    song_name = youtube.download(url)
+    song_name = youtube.download(url, user['upload_path']+"/")
     if not song_name:
         return render_template("/error.html", message='Failed to download youtube video')
-    move_file(song_name)
     return redirect("/")
 
 @app.route("/spotify", methods=["POST"])
 def process_spotify():
+    user = get_user()
     url = request.form['url_spotify']
-    song_name = spotify.download(url)
+    song_name = spotify.download(url, user['upload_path']+"/")
     if not song_name:
         return render_template("/error.html", message='Failed to download spotify video')
-    move_file(song_name)
     return redirect("/")
 
 @app.route("/upload", methods=["POST"])

@@ -1,10 +1,10 @@
 import subprocess
 
-def download(url):
+def download(url, output_dir):
     song_name = None
     print(f"[Info]: Downloading Spotify at: {url}")
     process = subprocess.Popen(
-        ["spotdl", url, "--format", "mp3", "--overwrite", "force", "--cookie-file", "assets/cookies-spotify.txt", "--yt-dlp-args", "--cookies assets/cookies-youtube.txt", "--print-errors", "--log-level", "DEBUG"],
+        ["spotdl", url, "--format", "mp3", "--overwrite", "force", "--cookie-file", "assets/cookies-spotify.txt", "--output", output_dir],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True)
