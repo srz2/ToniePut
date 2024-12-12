@@ -4,7 +4,7 @@ def download(url, output_dir):
     song_name = None
     print(f"[Info]: Downloading Youtube at: {url}")
     process = subprocess.Popen(
-        ["yt-dlp", url, "-x", "--audio-format", "mp3", "--print", "filename", "-o", f"{output_dir}/%(title)s.%(ext)s", "--no-simulate", "--cookies", "assets/cookies-youtube.txt", "-v"],
+        ["yt-dlp", url, "-x", "--audio-format", "mp3", "--print", "filename", "-o", f"{output_dir}/%(title)s.%(ext)s", "--no-simulate", "--cookies", "assets/cookies-youtube.txt"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True)

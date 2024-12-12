@@ -130,7 +130,7 @@ def process_spotify():
     url = request.form['url_spotify']
     song_name = spotify.download(url, user['upload_path']+"/")
     if not song_name:
-        return render_template("/error.html", message='Failed to download spotify video')
+        return render_template("/error.html", message='Failed to download spotify song')
     return redirect("/")
 
 @app.route("/upload", methods=["POST"])

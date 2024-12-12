@@ -22,3 +22,35 @@ In order to download the audio of youtube videos, [yt-dlp](https://github.com/yt
 ## Spotify
 
 In order to download the audio files of a Spotify song, [spotdp](https://github.com/spotDL/spotify-downloader) is used. 
+
+# How to Build
+
+## Docker 
+To Build a docker image, use the following command
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t {name}/tonieput:{tag} .
+```
+
+# How to Run
+
+## Local
+To build locally, use the following command
+
+```bash
+gunicorn --certfile ../cert.pem --keyfile ../key.pem -b 0.0.0.0:5050 --chdir src main:app
+```
+
+## Linux
+This needs two volumes:
+1. Location for cert.pem and key.pem at `/var/lib/tonieput/certs`
+2. Location for user data at `/var/lib/tonieput/data`
+
+```bash
+docker run \
+-v /var/lib/tonieput/certs:/app/certs \
+-v /var/lib/tonieput/data:/app/upload_to_tonie \
+-p 5000:8000 \
+-d \
+[Docker_Image]
+```
