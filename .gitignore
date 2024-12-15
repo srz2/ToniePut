@@ -162,7 +162,7 @@ cython_debug/
 #.idea/
 
 # Prevent items in upload_to_tonie from tracking
-*/upload_to_tonie/*/
+upload_to_tonie/
 
 # MacOS
 .DS_Store
@@ -172,3 +172,4 @@ cython_debug/
 
 # Certificates
 *.pem
+

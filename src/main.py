@@ -1,5 +1,4 @@
 import os
-import shutil
 import pickle
 from flask import Flask, render_template, request, redirect, session
 import downloaders.download_spotify as spotify
@@ -66,24 +65,38 @@ def delete_file(target_file):
     filename = f"{user['upload_path']}/{target_file}"
     os.remove(filename)
 
+def createClient(username: str, password: str) -> TonieAPI:
+    try:
+        api = TonieAPI(username, password)
+        return api
+    except Exception:
+        print('[Error]: Failed to create client')
+        return None
+
 @app.route("/")
 def index():
     user = get_user()
 
-    # User is logged in, get user information
+    # Get information for user
     files = get_pending_files()
     tonies = get_creative_tonies()
+    
+    # Render information to user
     return render_template('index.html', files=files, tonies=tonies, username= None if user == None else user['profile'].email)
 
 @app.route("/mytonie-login", methods=["POST"])
 def tonie_login():
     username = request.form.get('username')
     password = request.form.get('password')
-    api = TonieAPI(username, password)
+    api = createClient(username, password)
+    if not api:
+        return render_template("loginfail.html", message="Login credentials are incorrect")
+    
+    # Get profile for user
     profile = api.get_me()
     if profile == None:
         print("[Error]: Failed to login")
-        return render_template("error.html", message="Failed to log into TonieBox Api")
+        return render_template("loginfail.html", message="Failed to log into TonieBox Api")
 
     # Save user information
     user = {
