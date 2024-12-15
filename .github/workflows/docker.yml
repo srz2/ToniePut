@@ -4,9 +4,23 @@ on:
   push:
     branches:
       - main  # Runs on push to main branch
+    paths:
+      - '**/*.py'
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - '**/Dockerfile'
+      - '**/requirements.txt'
   pull_request:
     branches:
       - main  # Runs on pull request merge to main branch
+    paths:
+      - '**/*.py'
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - '**/Dockerfile'
+      - '**/requirements.txt'
 
 jobs:
   build:
@@ -36,8 +50,8 @@ jobs:
       run: |
         TAG=$(git describe --tags --abbrev=0)
         if [[ -z "$TAG" ]]; then
-          echo "Error: No tag found on this commit"
-          exit 1
+          echo "No tag found on this commit, skipping docker deployment"
+          exit 0
         fi
         # Remove the 'v' from the tag (e.g., 'v1.0' -> '1.0')
         TAG=${TAG#v}
