@@ -196,6 +196,10 @@ def process_Local():
     if file.filename == '':
         return 'No selected files'
     
+    # Only accept MP3s
+    if not file.filename.endswith('.mp3'):
+        return render_template('/error.html', message="Invalid file type, only MP3 is allowed")
+    
     # Check upload file size
     MAX_SIZE_MB = 10.0
     size = get_file_size_mb(file)
