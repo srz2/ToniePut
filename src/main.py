@@ -1,8 +1,11 @@
 import os
+import math
+import json
 import pickle
 from flask import Flask, render_template, request, redirect, session
 import downloaders.download_spotify as spotify
 import downloaders.download_youtube as youtube
+import downloaders.download_youtube_details as yt_details
 from tonie_api.api import TonieAPI
 
 app = Flask(__name__)
@@ -64,6 +67,32 @@ def delete_file(target_file):
         raise FileNotFoundError()
     filename = f"{user['upload_path']}/{target_file}"
     os.remove(filename)
+
+def convert_to_seconds(time_str):
+    # Split the time string into components
+    parts = list(map(int, time_str.split(":")))
+    
+    # Calculate total seconds based on the number of components
+    if len(parts) == 3:  # Format is HH:MM:SS
+        hours, minutes, seconds = parts
+        total_seconds = hours * 3600 + minutes * 60 + seconds
+    elif len(parts) == 2:  # Format is MM:SS
+        minutes, seconds = parts
+        total_seconds = minutes * 60 + seconds
+    else:
+        raise ValueError("Invalid time format. Use MM:SS or HH:MM:SS.")
+    
+    return total_seconds
+
+def get_file_size_mb(file):
+    # Seek to the end of the file to find its size in bytes
+    file.stream.seek(0, 2)  # Move to the end of the file
+    size_in_bytes = file.stream.tell()  # Get the current position (file size in bytes)
+    file.stream.seek(0)  # Reset the stream pointer to the beginning
+    
+    # Convert bytes to megabytes
+    size_in_mb = size_in_bytes / (1024 * 1024)
+    return size_in_mb
 
 def createClient(username: str, password: str) -> TonieAPI:
     try:
@@ -132,6 +161,21 @@ def get_creative_tonies():
 def process_youtube():
     user = get_user()
     url = request.form['url_youtube']
+
+    # Get video deatils first
+    MAX_DURATION = 1200 # seconds
+    MAX_DURATION_LONG = f"{math.ceil(MAX_DURATION / 60)} Minutes"
+    details = yt_details.download(url)
+    if not details:
+        return render_template('/error.html', message="Failed to download youtube video details")
+    obj = json.loads(details)
+    duration_str = obj['duration_string']
+    seconds = convert_to_seconds(duration_str)
+    if seconds > MAX_DURATION:
+        error_msg = f"Video Duration: {duration_str} or {seconds} seconds. Failing, outside max duration of {MAX_DURATION_LONG}"
+        print(error_msg)
+        return render_template('/error.html', message=error_msg)
+
     song_name = youtube.download(url, user['upload_path']+"/")
     if not song_name:
         return render_template("/error.html", message='Failed to download youtube video')
@@ -151,6 +195,15 @@ def process_Local():
     file = request.files['file']
     if file.filename == '':
         return 'No selected files'
+    
+    # Check upload file size
+    MAX_SIZE_MB = 10.0
+    size = get_file_size_mb(file)
+    if size > MAX_SIZE_MB:
+        error_msg = f"File is too large at {math.trunc(size)} MB, max size is {MAX_SIZE_MB} MB"
+        print(error_msg)
+        return render_template('/error.html', message=error_msg)
+
     save_file(file)
     return redirect("/")
 
