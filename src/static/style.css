@@ -1,3 +1,270 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    background-color: slategray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgb(124, 123, 123);
+}
+
+/* Login */
+
+#login-icon {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.login-wrapper {
+    border: solid black 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.login-wrapper h2 {
+    font-size: 16px;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.input-row {
+    font-size: 18px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.input-row input {
+    border: black solid 2px;
+    border-radius: 3px;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #d3d3d3;
+    width: 100%;
+    color: black;
+}
+
+.input-row button {
+    background-color: green;
+    border: none;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.input-row button:hover {
+    background-color: darkgreen;
+    cursor: pointer;
+}
+
+/* Navigation */
+
+#icon {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.home-items .title {
+    margin: 10px;
+}
+
+.home-items .title h1 {
+    margin: 0;
+}
+
+.content-wrapper {
+    border: solid black 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.854);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 10px 0;
+}
+
+.content-wrapper h1 {
+    font-size: 24px;
+}
+
+.content-wrapper nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.content-wrapper button {
+    font-size: 12px;
+    border: 0;
+    background-color: rgb(210, 0, 17);
+    color: rgb(255, 255, 255);
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.content-wrapper button:hover {
+    cursor: pointer;
+}
+
+#logout-form {
+    display: flex;
+    align-items: center;
+}
+
+#logout-form p{
+    margin: 0 20px;
+    font-size: 14px;
+}
+
+.menu-items {
+    display: flex;
+    align-items: center;
+}
+
+.menu-items h1 {
+    margin-left: 15px;
+}
+
+/* Loading Section */
+
+.load-container {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.load-container ul {
+    list-style: none;
+}
+
+.load-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(210, 0, 17, 0.15);
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 15px;
+    border: solid rgb(210, 0, 17) 1px;
+}
+
+.load-container form label {
+    margin: 0 0 10px 0;
+}
+
+.load-container form input {
+    width: 100%;
+}
+
+.load-container form button {
+    margin-top: 15px;
+    width: 65%;
+}
+
+/* Upload Section */
+
+.pending-files {
+    width: 100%;
+}
+
+.title-left {
+    align-items: start;
+}
+
+.title-middle {
+    align-items: center;
+}
+
+.title-right {
+    align-items: end;
+}
+
+.creative-tonies ol {
+    text-align: center;
+    margin: 0 auto;
+    list-style-position: inside;
+}
+
+.creative-tonies li {
+    margin-top: 5px;
+}
+
+.creative-tonies p {
+    display: inline;
+}
+.creative-tonies form {
+    display: inline;
+}
+
+.creative-tonies .song-rename-button {
+    background-color: rgba(0, 0, 200, 0.75);
+    display: inline;
+}
+
+.tonie-selection {
+    width: 100%;
+}
+
+.tonie-selection form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tonie-selection button {
+    font-size: 18px;
+    margin: 15px 0;
+    width: 45%;
+}
+
+@media (max-width: 600px) {
+    #icon {
+        width: 50px;
+        border-radius: 50%;
+    }
+
+    .title p {
+        font-size: 0.75em;
+    }
+
+    .person-items p {
+        display: none;
+    }
+
+    .load-container {
+        display: flex;
+        flex-direction: column;
+        width: 85%;
+        margin: 0 auto;
+    }
+
+    .tonie-selection button {
+        width: 85%;
+    }
 }
