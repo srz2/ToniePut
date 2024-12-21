@@ -1,7 +1,7 @@
 ToniePut
 ========
 
-![Docker Image Version](https://img.shields.io/docker/v/srz2/tonieput?label=Docker%20Image&link=https%3A%2F%2Fgithub.com%2Fsrz2%2FToniePut)
+![Docker Image Version](https://img.shields.io/docker/v/srz2/tonieput?label=Docker%20Image&link=https%3A%2F%2Fhub.docker.com%2Frepository%2Fdocker%2Fsrz2%2Ftonieput%2Fgeneral)
 
 # Introduction
 ToniePut is a utility to allow you to connect to your [TonieBox](https://tonies.com/) and upload MP3 files to the box sourced either from youtube, spotifiy, or local files
