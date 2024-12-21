@@ -157,11 +157,20 @@ def get_creative_tonies():
     tonies = api.get_all_creative_tonies_by_household(house)
     return tonies
 
-@app.route("/youtube", methods=["POST"])
-def process_youtube():
-    user = get_user()
-    url = request.form['url_youtube']
+@app.route("/download", methods=["POST"])
+def process_download_link():
+    url = request.form['url']
+    if 'youtube.com' in url:
+        return process_youtube(url)
+    elif 'spotify.com' in url:
+        return process_spotify(url)
+    else:
+        return render_template("/error.html", message='Unsupported Url download source mechanism')
 
+def process_youtube(url):
+    if not url:
+        return render_template("/error.html", message='No Url provided for youtube download request')
+    user = get_user()
     # Get video deatils first
     MAX_DURATION = 1200 # seconds
     MAX_DURATION_LONG = f"{math.ceil(MAX_DURATION / 60)} Minutes"
@@ -181,10 +190,17 @@ def process_youtube():
         return render_template("/error.html", message='Failed to download youtube video')
     return redirect("/")
 
-@app.route("/spotify", methods=["POST"])
-def process_spotify():
+def process_spotify(url: str):
+    if not url:
+        return render_template("/error.html", message='No Url provided for spotifiy download request')
+    
+    # remove si if it exists
+    # https://open.spotify.com/track/4KBCelgd9JynmV0DpWjYJA?si=30639a7ff023439a
+    if "?" in url:
+        pos = url.index("?")
+        url = url[0:pos]
+
     user = get_user()
-    url = request.form['url_spotify']
     song_name = spotify.download(url, user['upload_path']+"/")
     if not song_name:
         return render_template("/error.html", message='Failed to download spotify song')
