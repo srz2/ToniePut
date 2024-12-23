@@ -182,7 +182,6 @@ def process_youtube(url):
         return render_template("/error.html", message='No Url provided for youtube download request')
     
     # remove si if it exists
-    # https://youtu.be/8tDOeQqnrYQ?si=ja8546dJrQG2tqPV
     if "?" in url:
         pos = url.index("?")
         url = url[0:pos]
@@ -212,7 +211,6 @@ def process_spotify(url: str):
         return render_template("/error.html", message='No Url provided for spotifiy download request')
     
     # remove si if it exists
-    # https://open.spotify.com/track/4KBCelgd9JynmV0DpWjYJA?si=30639a7ff023439a
     if "?" in url:
         pos = url.index("?")
         url = url[0:pos]
