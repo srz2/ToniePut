@@ -173,3 +173,6 @@ upload_to_tonie/
 # Certificates
 *.pem
 
+# Vs Code
+.vscode/
+
