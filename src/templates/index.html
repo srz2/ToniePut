@@ -94,11 +94,19 @@
                 <form action="/load-tonie" method="post">
                     <label for="tonie-selection">Selected Tonie</label>
                     <select name="selected-tonie" id="tonie-selection-dropbox">
+                        {% if tonies|length > 0 %}
                         {%for tonie in tonies%}
                         <option value="{{tonie.id}}">{{tonie.name}} ({{tonie.id}})</option>
                         {% endfor %}
+                        {% else%}
+                        <option value="">No Creative Tonies Available</option>
+                        {% endif%}
                     </select>
+                    {% if tonies|length > 0 and files|length > 0 %}
                     <button type="submit">Load to Selected Tonie</button>
+                    {% else %}
+                    <button disabled type="submit">Load to Selected Tonie</button>
+                    {% endif%}
                 </form>
             </div>
         </div>

@@ -102,6 +102,10 @@ def createClient(username: str, password: str) -> TonieAPI:
         print('[Error]: Failed to create client')
         return None
 
+def logout_user():
+    if 'user' in session.keys():
+        session.pop('user')
+
 @app.route("/")
 def index():
     user = get_user()
@@ -145,7 +149,7 @@ def tonie_login():
 
 @app.route("/logout", methods=["POST"])
 def tonie_logout():
-    session.pop('user')
+    logout_user()
     return redirect('/')
 
 @app.route("/get-tonies", methods=["GET"])
@@ -153,7 +157,13 @@ def get_creative_tonies():
     api = get_api_client()
     if api == None:
         return []
-    house = api.get_households()[0]
+    houses = api.get_households()
+    if len(houses) == 0:
+        return list()
+    
+    # TODO: Create way to work with multiple houses
+    house = houses[0]
+    
     tonies = api.get_all_creative_tonies_by_household(house)
     return tonies
 

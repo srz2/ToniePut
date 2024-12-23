@@ -186,6 +186,10 @@ body {
     width: 65%;
 }
 
+.tonie-selection form button:disabled {
+    background-color: rgba(210, 0, 18, 0.222);
+}
+
 /* Upload Section */
 
 .pending-files {
