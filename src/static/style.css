@@ -13,6 +13,10 @@ body {
     background-color: rgb(124, 123, 123);
 }
 
+.overlay-active {
+    overflow: hidden; /* Disable scrolling */
+  }
+
 /* Login */
 
 #login-icon {
@@ -245,6 +249,79 @@ body {
     font-size: 18px;
     margin: 15px 0;
     width: 45%;
+}
+
+/* Popup */
+.popup-wrapper {
+    display: none;
+    border: solid black 2px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    padding: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    position: fixed;
+    margin: 0 auto;
+}
+
+.popup-wrapper > div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.popup-wrapper > div > p {
+    color: rgba(112, 128, 144, 0.45);
+    text-align: end;
+    font-size: 28px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.popup-wrapper > div > p:hover {
+    color: rgba(112, 128, 144, 0.85);
+}
+
+.popup-wrapper form {
+    width: 80%;
+}
+
+.popup-wrapper div {
+    margin-top: 5px;
+}
+
+.popup-wrapper form input {
+    width: 80%;
+    border-radius: 30px;
+    border: solid gray 1px;
+    padding: 5px;
+}
+
+.popup-wrapper p {
+    display: inline;
+}
+
+.popup-wrapper h1 {
+    font-size: 24px;
+}
+
+.popup-wrapper button {
+    font-size: 12px;
+    border: 0;
+    background-color: rgb(210, 0, 17);
+    color: rgb(255, 255, 255);
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: block;
+    width: 40%;
+    margin: 10px auto 0 auto;
+    justify-content: center;
+    cursor: pointer;
 }
 
 @media (max-width: 600px) {
