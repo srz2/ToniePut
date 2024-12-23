@@ -170,7 +170,7 @@ def get_creative_tonies():
 @app.route("/download", methods=["POST"])
 def process_download_link():
     url = request.form['url']
-    if 'youtube.com' in url:
+    if 'youtube.com' in url or 'youtu.be' in url:
         return process_youtube(url)
     elif 'spotify.com' in url:
         return process_spotify(url)
@@ -180,6 +180,13 @@ def process_download_link():
 def process_youtube(url):
     if not url:
         return render_template("/error.html", message='No Url provided for youtube download request')
+    
+    # remove si if it exists
+    # https://youtu.be/8tDOeQqnrYQ?si=ja8546dJrQG2tqPV
+    if "?" in url:
+        pos = url.index("?")
+        url = url[0:pos]
+
     user = get_user()
     # Get video deatils first
     MAX_DURATION = 1200 # seconds
