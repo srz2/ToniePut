@@ -253,9 +253,19 @@ def delete_pending_file():
 @app.route("/rename_pending_file", methods=["POST"])
 def rename_pending_file():
     file_name = request.form.get('current_song')
-    new_name = request.form.get('new-name')
+    new_name = request.form.get('new-name').rstrip()
+
+    # Ignore empty name
+    if new_name.rstrip() == '':
+        return redirect('/')
+
     if not new_name.endswith('.mp3'):
         new_name += ".mp3"
+
+    # Ignore same name
+    if new_name == file_name:
+        return redirect('/')
+
     rename_file(file_name, new_name)
     return redirect("/")
 
