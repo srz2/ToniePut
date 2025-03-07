@@ -182,7 +182,7 @@ def process_youtube(url):
         return render_template("/error.html", message='No Url provided for youtube download request')
     
     # remove si if it exists
-    if "?" in url:
+    if "?si=" in url:
         pos = url.index("?")
         url = url[0:pos]
 
