@@ -3,7 +3,7 @@ import math
 import json
 import pickle
 from flask import Flask, render_template, request, redirect, session
-import downloaders.download_spotify as spotify
+# import downloaders.download_spotify as spotify
 import downloaders.download_youtube as youtube
 import downloaders.download_youtube_details as yt_details
 from tonie_api.api import TonieAPI
@@ -172,8 +172,8 @@ def process_download_link():
     url = request.form['url']
     if 'youtube.com' in url or 'youtu.be' in url:
         return process_youtube(url)
-    elif 'spotify.com' in url:
-        return process_spotify(url)
+    # elif 'spotify.com' in url:
+    #     return process_spotify(url)
     else:
         return render_template("/error.html", message='Unsupported Url download source mechanism')
 
@@ -206,20 +206,20 @@ def process_youtube(url):
         return render_template("/error.html", message='Failed to download youtube video')
     return redirect("/")
 
-def process_spotify(url: str):
-    if not url:
-        return render_template("/error.html", message='No Url provided for spotifiy download request')
+# def process_spotify(url: str):
+#     if not url:
+#         return render_template("/error.html", message='No Url provided for spotifiy download request')
     
-    # remove si if it exists
-    if "?" in url:
-        pos = url.index("?")
-        url = url[0:pos]
+#     # remove si if it exists
+#     if "?" in url:
+#         pos = url.index("?")
+#         url = url[0:pos]
 
-    user = get_user()
-    song_name = spotify.download(url, user['upload_path']+"/")
-    if not song_name:
-        return render_template("/error.html", message='Failed to download spotify song')
-    return redirect("/")
+#     user = get_user()
+#     song_name = spotify.download(url, user['upload_path']+"/")
+#     if not song_name:
+#         return render_template("/error.html", message='Failed to download spotify song')
+#     return redirect("/")
 
 @app.route("/upload", methods=["POST"])
 def process_Local():
