@@ -8,4 +8,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg
 COPY src/ /app
 ENV PORT=8000
 EXPOSE 8000
-CMD ["gunicorn", "-b", "0.0.0.0", "--timeout", "0", "main:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "--timeout", "0", "main:app"]
