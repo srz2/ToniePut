@@ -327,6 +327,16 @@ body {
     cursor: pointer;
 }
 
+.loader-container {
+    padding: 10px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+    background-color: rgba(210, 0, 17, 0.15);
+    border: solid rgb(210, 0, 17) 1px;
+    display: none;
+}
+
 @media (max-width: 600px) {
     #icon {
         width: 50px;

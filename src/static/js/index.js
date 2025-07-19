@@ -5,6 +5,9 @@ const containers = document.getElementsByClassName('content-wrapper')
 const btnRenameSongs = document.getElementsByClassName('song-rename-button')
 const currentSong = document.getElementById('current_song');
 const currentSongHidden = document.getElementById('current_song_hidden');
+const loader = document.querySelector('.loader-container');
+const linkForm = document.getElementById('link-form');
+const fileForm = document.getElementById('file-form');
 
 // Add onclick listeners to each rename button
 for (let c = 0; c < btnRenameSongs.length; c++){
@@ -33,3 +36,15 @@ function toggleContainers(isEnabled){
         containers[z].style['pointer-events'] = isEnabled ? 'auto' : 'none';
     }
 }
+
+// Show loader logic
+linkForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  loader.style.display = 'block';
+  setTimeout(() => linkForm.submit(), 100); // Small delay to allow DOM update
+});
+fileForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  loader.style.display = 'block';
+  setTimeout(() => fileForm.submit(), 100); // Small delay to allow DOM update
+});
